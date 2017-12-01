@@ -1,0 +1,68 @@
+<% title @host.to_label, icon(@host.operatingsystem) + @host.to_label %>
+<div class="blank-slate-pf">
+  <div class="blank-slate-pf-icon">
+    <%= icon_text('medkit', '', :kind => 'fa', :class => @host.rescue_mode? ? 'text-success' : '') %>
+  </div>
+  <h1><%= _('Rescue Mode') %></h1>
+  <p>
+  <% if @host.rescue_mode? %>
+    <%= _("This host has rescue mode enabled.") %></br>
+  <% elsif !@host.can_be_rescued? %>
+    <%= _("This host can not be booted into rescue mode.") %></br>
+  <% else %>
+    <%= _("This host does not have rescue mode enabled.") %></br>
+  <% end %>
+  </p>
+  <div class="blank-slate-pf-main-action">
+    <% if @host.rescue_mode? %>
+      <%= link_to_if_authorized(_("Back to host"), hash_for_host_path(:id => @host), :title => _("Back to host"), :class => 'btn btn-default btn-lg') %>
+      <%= link_to_if_authorized(
+        _('Cancel rescue mode'),
+        hash_for_cancel_rescue_host_path(:id => @host).merge(:auth_object => @host, :permission => 'rescue_hosts'),
+        :method => :put,
+        :class => 'btn btn-primary btn-lg')
+      %>
+    <% elsif !@host.can_be_rescued? %>
+      <div class="alert alert-info" style="text-align: left; font-size: 0.8em;">
+        <%= alert_header(_('The following reasons prevent a boot into rescue mode:'), 'alert-info') %>
+      <ul>
+        <% unless @host.managed? %>
+          <li><%= _('%s is not managed.') % @host %></li>
+        <% end %>
+        <% unless SETTINGS[:unattended] %>
+          <li><%= _('Unattended mode is not activated.') %></li>
+        <% end %>
+        <% unless @host.pxe_build? %>
+          <li><%= _('%s does not support PXE booting.') % @host %></li>
+        <% end %>
+        <% if @host.build? %>
+          <li><%= _('%s is in build mode.') % @host %></li>
+        <% end %>
+      </ul>
+      </div>
+      <%= link_to_if_authorized(_("Back to host"), hash_for_host_path(:id => @host), :title => _("Back to host"), :class => 'btn btn-default btn-lg') %>
+    <% else %>
+      <div class="panel panel-default">
+        <div class="panel-heading">
+        <h3 class="panel-title"><%= _('Activate rescue mode') %></h3>
+      </div>
+      <div class="panel-body">
+        <%= form_for :host,
+          :method => :put,
+          :html => {:class => 'form-horizontal'},
+          :url    => hash_for_set_rescue_host_path(:id => @host).merge(:auth_object => @host, :permission => 'rescue_hosts') do |f|
+        %>
+          <div class="alert alert-warning" style="text-align: left; font-size: 0.8em;">
+            <span class="pficon pficon-warning-triangle-o"></span>
+            <%= _("Activating rescue mode can disrupt running services on %s.") % @host %>
+          </div>
+
+          <%= checkbox_f(f, :rescue_mode, :help_text => _('Reboot %s') % @host, :size => '') if @host.supports_power_and_running? %>
+         <%= link_to_if_authorized(_("Back to host"), hash_for_host_path(:id => @host), :title => _("Back to host"), :class => 'btn btn-default btn-lg') %>
+         <%= f.submit _("Activate rescue mode"), :class => "btn btn-danger btn-lg submit" %>
+        <% end %>
+      <% end %>
+      </div>
+    </div>
+  </div>
+</div>
