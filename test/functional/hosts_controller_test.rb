@@ -20,7 +20,7 @@ module ForemanRescue
       context 'when host is not saved' do
         test 'the flash should inform it' do
           Host::Managed.any_instance.expects(:set_rescue).returns(false)
-          put :set_rescue, { :id => host.name }, set_session_user
+          put :set_rescue, params: { :id => host.name }, session: set_session_user
           assert_response :found
           assert_redirected_to hosts_path
           assert flash[:error] =~ /Failed to enable #{host} for rescue system/
@@ -33,7 +33,7 @@ module ForemanRescue
         end
 
         test 'the flash should inform it' do
-          put :set_rescue, { :id => host.name }, set_session_user
+          put :set_rescue, params: { :id => host.name }, session: set_session_user
           assert_response :found
           assert_redirected_to hosts_path
           assert_equal "Enabled #{host} for rescue system on next boot.", flash[:notice]
@@ -48,7 +48,7 @@ module ForemanRescue
 
           test 'the flash should inform it' do
             power_mock.stubs(:reset).returns(true)
-            put :set_rescue, { :id => host.name, :host => { :rescue_mode => '1' } }, set_session_user
+            put :set_rescue, params: { :id => host.name, :host => { :rescue_mode => '1' } }, session: set_session_user
             assert_response :found
             assert_redirected_to hosts_path
             assert_equal "Enabled #{host} for reboot into rescue system.", flash[:notice]
@@ -56,7 +56,7 @@ module ForemanRescue
 
           test 'with failed reboot, the flash should inform it' do
             power_mock.stubs(:reset).returns(false)
-            put :set_rescue, { :id => host.name, :host => { :rescue_mode => '1' } }, set_session_user
+            put :set_rescue, params: { :id => host.name, :host => { :rescue_mode => '1' } }, session: set_session_user
             host.power.reset
             assert_response :found
             assert_redirected_to hosts_path
@@ -65,7 +65,7 @@ module ForemanRescue
 
           test 'reboot raised exception, the flash should inform it' do
             power_mock.stubs(:reset).raises(Foreman::Exception)
-            put :set_rescue, { :id => host.name, :host => { :rescue_mode => '1' } }, set_session_user
+            put :set_rescue, params: { :id => host.name, :host => { :rescue_mode => '1' } }, session: set_session_user
             assert_response :found
             assert_redirected_to hosts_path
             assert_equal "Enabled #{host} for rescue system on next boot.", flash[:notice]
@@ -89,7 +89,7 @@ module ForemanRescue
         end
 
         test 'the flash should inform it' do
-          put :cancel_rescue, { :id => host.name }, set_session_user
+          put :cancel_rescue, params: { :id => host.name }, session: set_session_user
           assert_response :found
           assert_redirected_to hosts_path
           assert_equal "Canceled booting into rescue system for #{host}.", flash[:notice]
@@ -102,7 +102,7 @@ module ForemanRescue
         end
 
         test 'the flash should inform it' do
-          put :cancel_rescue, { :id => host.name }, set_session_user
+          put :cancel_rescue, params: { :id => host.name }, session: set_session_user
           assert_response :found
           assert_redirected_to hosts_path
           assert_includes flash[:error], "Failed to cancel booting into rescue system for #{host}"
@@ -112,7 +112,7 @@ module ForemanRescue
 
     describe '#rescue' do
       test 'renders page' do
-        get :rescue, { :id => host.name }, set_session_user
+        get :rescue, params: { :id => host.name }, session: set_session_user
         assert_response :success
         assert_template 'foreman_rescue/hosts/rescue'
       end
