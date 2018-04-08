@@ -36,7 +36,7 @@ module ForemanRescue
           put :set_rescue, params: { :id => host.name }, session: set_session_user
           assert_response :found
           assert_redirected_to hosts_path
-          assert_equal "Enabled #{host} for rescue system on next boot.", flash[:notice]
+          assert_equal "Enabled #{host} for rescue system on next boot.", flash[:success]
         end
 
         context 'when reboot is requested' do
@@ -51,7 +51,7 @@ module ForemanRescue
             put :set_rescue, params: { :id => host.name, :host => { :rescue_mode => '1' } }, session: set_session_user
             assert_response :found
             assert_redirected_to hosts_path
-            assert_equal "Enabled #{host} for reboot into rescue system.", flash[:notice]
+            assert_equal "Enabled #{host} for reboot into rescue system.", flash[:success]
           end
 
           test 'with failed reboot, the flash should inform it' do
@@ -60,7 +60,7 @@ module ForemanRescue
             host.power.reset
             assert_response :found
             assert_redirected_to hosts_path
-            assert_equal "Enabled #{host} for boot into rescue system on next boot, but failed to power cycle the host.", flash[:notice]
+            assert_equal "Enabled #{host} for boot into rescue system on next boot, but failed to power cycle the host.", flash[:success]
           end
 
           test 'reboot raised exception, the flash should inform it' do
@@ -68,7 +68,7 @@ module ForemanRescue
             put :set_rescue, params: { :id => host.name, :host => { :rescue_mode => '1' } }, session: set_session_user
             assert_response :found
             assert_redirected_to hosts_path
-            assert_equal "Enabled #{host} for rescue system on next boot.", flash[:notice]
+            assert_equal "Enabled #{host} for rescue system on next boot.", flash[:success]
           end
         end
       end
@@ -92,7 +92,7 @@ module ForemanRescue
           put :cancel_rescue, params: { :id => host.name }, session: set_session_user
           assert_response :found
           assert_redirected_to hosts_path
-          assert_equal "Canceled booting into rescue system for #{host}.", flash[:notice]
+          assert_equal "Canceled booting into rescue system for #{host}.", flash[:success]
         end
       end
 
