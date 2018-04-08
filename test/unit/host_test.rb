@@ -2,16 +2,16 @@ require 'test_plugin_helper'
 
 class HostTest < ActiveSupport::TestCase
   setup do
-    User.current = FactoryGirl.build(:user, :admin)
+    User.current = FactoryBot.build(:user, :admin)
     setup_settings
     disable_orchestration
   end
 
   context 'a host with tftp orchestration' do
-    let(:organization) { FactoryGirl.create(:organization) }
-    let(:tax_location) { FactoryGirl.create(:location) }
+    let(:organization) { FactoryBot.create(:organization) }
+    let(:tax_location) { FactoryBot.create(:location) }
     let(:template) do
-      FactoryGirl.create(
+      FactoryBot.create(
         :provisioning_template,
         :template_kind => TemplateKind.find_by(name: 'PXELinux'),
         :locations => [tax_location],
@@ -19,7 +19,7 @@ class HostTest < ActiveSupport::TestCase
       )
     end
     let(:os) do
-      FactoryGirl.create(
+      FactoryBot.create(
         :operatingsystem,
         :with_os_defaults,
         :with_associations,
@@ -28,7 +28,7 @@ class HostTest < ActiveSupport::TestCase
       )
     end
     let(:host) do
-      FactoryGirl.create(
+      FactoryBot.create(
         :host,
         :managed,
         :with_tftp_orchestration,
@@ -64,11 +64,11 @@ class HostTest < ActiveSupport::TestCase
   end
 
   context 'rescue mode tftp remplate rendering' do
-    let(:host) { FactoryGirl.build(:host, :managed, :rescue_mode) }
+    let(:host) { FactoryBot.build(:host, :managed, :rescue_mode) }
     let(:template) do
-      FactoryGirl.create(:provisioning_template, :name => 'my template',
-                                                 :template => 'test content',
-                                                 :template_kind => template_kinds(:pxelinux))
+      FactoryBot.create(:provisioning_template, :name => 'my template',
+                                                :template => 'test content',
+                                                :template_kind => template_kinds(:pxelinux))
     end
 
     test 'renders tftp template' do
