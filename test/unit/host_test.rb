@@ -13,7 +13,7 @@ class HostTest < ActiveSupport::TestCase
     let(:template) do
       FactoryGirl.create(
         :provisioning_template,
-        :template_kind => TemplateKind.find_by_name('PXELinux'),
+        :template_kind => TemplateKind.find_by(name: 'PXELinux'),
         :locations => [tax_location],
         :organizations => [organization]
       )

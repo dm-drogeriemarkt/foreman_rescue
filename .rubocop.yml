@@ -1,47 +1,43 @@
 AllCops:
-  Exclude:
-    - 'doc/plugins/**'
+   TargetRubyVersion: 2.2
+   TargetRailsVersion: 4.2
+   Exclude:
+     - '*.spec'
+     - 'Rakefile'
+
+Rails:
+  Enabled: true
+
+Rails/ActionFilter:
+  EnforcedStyle: action
 
 # Don't enforce documentation
 Style/Documentation:
   Enabled: false
 
-# Force before_filter until upgrade to Rails 4
-Rails/ActionFilter:
-  EnforcedStyle: action
-
 Metrics/MethodLength:
   Max: 40
 
-Style/AccessorMethodName:
-  Enabled: false
-
-Style/RedundantSelf:
-  Enabled: false
-
 Metrics/ClassLength:
-  Max: 500
+  Exclude:
+    - 'test/**/*'
 
-Style/FileName:
+Performance/FixedSize:
+  Exclude:
+    - 'test/**/*'
+
+Metrics/BlockLength:
+  Exclude:
+    - 'test/**/*'
+
+Naming/FileName:
   Exclude:
       - 'db/seeds.d/*'
 
 Style/WordArray:
   Enabled: false
 
-Style/BracesAroundHashParameters:
-  Enabled: false
-
 Style/RescueModifier:
-  Enabled: false
-
-Style/ClassAndModuleChildren:
-  Enabled: false
-
-Style/EachWithObject:
-  Enabled: false
-
-Metrics/ParameterLists:
   Enabled: false
 
 # Support both ruby19 and hash_rockets
@@ -53,15 +49,6 @@ Style/HashSyntax:
 
 Metrics/LineLength:
   Max: 190
-
-# Offense count: 21
-# Configuration parameters: CountComments.
-Metrics/ModuleLength:
-    Max: 400
-
-Style/MethodName:
-  Exclude:
-    - 'app/models/concerns/orchestration/*.rb'
 
 Style/SymbolArray:
   Enabled: false
@@ -76,9 +63,6 @@ Style/RegexpLiteral:
   Enabled: false
 
 Metrics/AbcSize:
-  Enabled: false
-
-Metrics/BlockLength:
   Enabled: false
 
 Metrics/PerceivedComplexity:

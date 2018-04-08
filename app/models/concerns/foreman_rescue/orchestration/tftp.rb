@@ -35,10 +35,10 @@ module ForemanRescue
 
       def rescue_mode_pxe_render(kind)
         template_name = Setting["rescue_#{kind.downcase}_tftp_template"]
-        template = ::ProvisioningTemplate.find_by_name(template_name)
-        return unless template.present?
+        template = ::ProvisioningTemplate.find_by(name: template_name)
+        return if template.blank?
         unattended_render template
-      rescue => e
+      rescue StandardError => e
         failure _("Unable to render %{kind} rescue template '%{name}' for TFTP: %{e}") % { :kind => kind, :name => template.try(:name), :e => e }, e
       end
 
