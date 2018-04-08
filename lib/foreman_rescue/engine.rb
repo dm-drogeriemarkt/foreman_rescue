@@ -16,7 +16,7 @@ module ForemanRescue
                 :before => :load_config_initializers do |_app|
       if begin
         Setting.table_exists?
-      rescue
+      rescue StandardError
         false
       end
         require_dependency File.expand_path('../../../app/models/setting/rescue.rb', __FILE__)
@@ -39,7 +39,7 @@ module ForemanRescue
         Host::Managed.send(:prepend, ForemanRescue::HostExtensions)
         HostsHelper.send(:prepend, ForemanRescue::HostsHelperExtensions)
         Nic::Managed.send(:prepend, ForemanRescue::Orchestration::TFTP)
-      rescue => e
+      rescue StandardError => e
         Rails.logger.warn "ForemanRescue: skipping engine hook (#{e})"
       end
     end

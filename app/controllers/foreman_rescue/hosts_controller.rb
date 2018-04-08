@@ -16,7 +16,7 @@ module ForemanRescue
                         _('Enabled %s for boot into rescue system on next boot, but failed to power cycle the host.')
                       end
             process_success :success_msg => message % @host, :success_redirect => :back
-          rescue => error
+          rescue StandardError => error
             message = _('Failed to reboot %s.') % @host
             warning(message)
             Foreman::Logging.exception(message, error)

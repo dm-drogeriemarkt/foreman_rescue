@@ -21,7 +21,7 @@ namespace :foreman_rescue do
                          "#{ForemanRescue::Engine.root}/lib/**/*.rb",
                          "#{ForemanRescue::Engine.root}/test/**/*.rb"]
       end
-    rescue
+    rescue StandardError
       puts 'Rubocop not loaded.'
     end
 
@@ -32,6 +32,4 @@ end
 Rake::Task[:test].enhance ['test:foreman_rescue']
 
 load 'tasks/jenkins.rake'
-if Rake::Task.task_defined?(:'jenkins:unit')
-  Rake::Task['jenkins:unit'].enhance ['test:foreman_rescue', 'foreman_rescue:rubocop']
-end
+Rake::Task['jenkins:unit'].enhance ['test:foreman_rescue', 'foreman_rescue:rubocop'] if Rake::Task.task_defined?(:'jenkins:unit')
