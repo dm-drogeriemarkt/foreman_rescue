@@ -3,10 +3,10 @@ require 'test_plugin_helper'
 module ForemanRescue
   class HostsControllerTest < ::ActionController::TestCase
     setup do
-      User.current = FactoryGirl.create(:user, :admin)
+      User.current = FactoryBot.create(:user, :admin)
     end
 
-    let(:host) { FactoryGirl.create(:host, :managed) }
+    let(:host) { FactoryBot.create(:host, :managed) }
 
     describe '#set_rescue' do
       setup do
