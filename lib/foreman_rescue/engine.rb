@@ -25,7 +25,7 @@ module ForemanRescue
 
     initializer 'foreman_rescue.register_plugin', :before => :finisher_hook do |_app|
       Foreman::Plugin.register :foreman_rescue do
-        requires_foreman '>= 1.17'
+        requires_foreman '>= 1.18'
 
         # Add permissions
         security_block :foreman_rescue do
