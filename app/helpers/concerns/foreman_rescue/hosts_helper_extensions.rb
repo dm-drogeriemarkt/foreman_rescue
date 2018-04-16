@@ -1,6 +1,12 @@
 module ForemanRescue
   module HostsHelperExtensions
-    def host_title_actions(host)
+    extend ActiveSupport::Concern
+
+    included do
+      alias_method_chain :host_title_actions, :rescue
+    end
+
+    def host_title_actions_with_rescue(host)
       title_actions(
         button_group(
           if host.rescue_mode?
@@ -17,7 +23,7 @@ module ForemanRescue
           end
         )
       )
-      super
+      host_title_actions_without_rescue(host)
     end
   end
 end

@@ -36,9 +36,9 @@ module ForemanRescue
 
     config.to_prepare do
       begin
-        Host::Managed.send(:prepend, ForemanRescue::HostExtensions)
-        HostsHelper.send(:prepend, ForemanRescue::HostsHelperExtensions)
-        Nic::Managed.send(:prepend, ForemanRescue::Orchestration::TFTP)
+        Host::Managed.send(:include, ForemanRescue::HostExtensions)
+        HostsHelper.send(:include, ForemanRescue::HostsHelperExtensions)
+        Nic::Managed.send(:include, ForemanRescue::Orchestration::TFTP)
       rescue StandardError => e
         Rails.logger.warn "ForemanRescue: skipping engine hook (#{e})"
       end

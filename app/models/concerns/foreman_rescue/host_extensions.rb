@@ -1,17 +1,18 @@
 module ForemanRescue
   module HostExtensions
-    def self.prepended(base)
-      base.class_eval do
-        validate :build_and_rescue_mode
-      end
+    extend ActiveSupport::Concern
+
+    included do
+      validate :build_and_rescue_mode
+      alias_method_chain :can_be_built?, :rescue
     end
 
     def can_be_rescued?
       managed? && SETTINGS[:unattended] && pxe_build? && !build? && !rescue_mode?
     end
 
-    def can_be_built?
-      super && !rescue_mode?
+    def can_be_built_with_rescue?
+      can_be_built_without_rescue? && !rescue_mode?
     end
 
     def set_rescue
