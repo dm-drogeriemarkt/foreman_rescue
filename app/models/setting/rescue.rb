@@ -1,18 +1,20 @@
 class Setting
   class Rescue < ::Setting
+    BLANK_ATTRS.concat ['rescue_pxegrub_tftp_template', 'rescue_pxegrub2_tftp_template']
+
     def self.default_settings
       [
         set('rescue_pxelinux_tftp_template',
             N_('PXELinux template used when booting rescue system'),
-            'create', N_('PXELinux rescue template'), nil,
+            'Kickstart rescue PXELinux', N_('PXELinux rescue template'), nil,
             :collection => proc { Setting::Rescue.templates('PXELinux') }),
         set('rescue_pxegrub_tftp_template',
             N_('PXEGrub template used when booting rescue system'),
-            'create', N_('PXEGrub rescue template'), nil,
+            '', N_('PXEGrub rescue template'), nil,
             :collection => proc { Setting::Rescue.templates('PXEGrub') }),
         set('rescue_pxegrub2_tftp_template',
             N_('PXEGrub2 template used when booting rescue system'),
-            'create', N_('PXEGrub2 rescue template'), nil,
+            '', N_('PXEGrub2 rescue template'), nil,
             :collection => proc { Setting::Rescue.templates('PXEGrub 2') })
       ]
     end
