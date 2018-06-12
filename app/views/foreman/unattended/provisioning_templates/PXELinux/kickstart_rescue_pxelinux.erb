@@ -1,0 +1,70 @@
+<%#
+kind: PXELinux
+name: Kickstart rescue PXELinux
+model: ProvisioningTemplate
+oses:
+- CentOS
+- Fedora
+- RedHat
+-%>
+# This file was deployed via '<%= template_name %>' template
+
+<%
+  major = @host.operatingsystem.major.to_i
+  mac = @host.provision_interface.mac
+
+  # Tell Anaconda to perform network functions with boot interface
+  #  both current and legacy syntax provided
+  options = ["ksdevice=bootif", "ks.device=bootif"]
+  if mac
+    bootif = '00-' + mac.gsub(':', '-')
+    options.push("BOOTIF=#{bootif}")
+  end
+
+  # Tell Anaconda what to pass off to kickstart server
+  #  both current and legacy syntax provided
+  options.push("nomount", "lang=en_US", "keymap=us")
+
+  # handle non-DHCP environments (e.g. bootdisk)
+  subnet = @host.provision_interface.subnet
+  unless subnet.dhcp_boot_mode?
+    # static network configuration
+    ip = @host.provision_interface.ip
+    mask = subnet.mask
+    gw = subnet.gateway
+    dns = [subnet.dns_primary]
+    if subnet.dns_secondary != ''
+      dns.push(subnet.dns_secondary)
+    end
+    if (@host.operatingsystem.name.match(/Fedora/i) && major < 17) || major < 7
+      # old Anacoda found in Fedora 16 or RHEL 6 and older
+      dns_servers = dns.join(',')
+      options.push("ip=#{ip}", "netmask=#{mask}", "gateway=#{gw}", "dns=#{dns_servers}")
+    else
+      options.push("ip=#{ip}::#{gw}:#{mask}:::none")
+      dns.each { |server|
+        options.push("nameserver=#{server}")
+      }
+    end
+  end
+
+  # kickstart repository for LiveOS
+  options.push("method=#{@host.operatingsystem.medium_uri(@host)}")
+
+  if host_param('blacklist')
+    options.push("modprobe.blacklist=" + host_param('blacklist').gsub(' ', ''))
+  end
+
+  # Enable rescue mode
+  options.push('rescue')
+
+  ksoptions = options.join(' ')
+-%>
+
+TIMEOUT <%= host_param('loader_timeout') || 10 %>
+DEFAULT <%= template_name %>
+
+LABEL <%= template_name %>
+  KERNEL <%= @kernel %>
+  APPEND initrd=<%= @initrd %> <%= pxe_kernel_options %> <%= ksoptions %>
+  IPAPPEND 2
