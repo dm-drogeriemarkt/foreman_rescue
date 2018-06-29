@@ -26,4 +26,5 @@ env:
     - TESTOPTS=-v
     - FOREMAN_PLUGIN_NAME=foreman_rescue
   matrix:
+    - FOREMAN_CORE_BRANCH=1.18-stable
     - FOREMAN_CORE_BRANCH=develop
