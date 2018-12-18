@@ -1,5 +1,7 @@
 # ForemanRescue
 
+[<img src="https://opensourcelogos.aws.dmtech.cloud/dmTECH_opensource_logo%401x.svg" height="21" width="130">](https://dmtech.de/)
+
 This plugin allows a user to boot a Foreman host into a rescue system via PXE.
 
 ## Compatibility
@@ -21,7 +23,7 @@ Fork and send a Pull Request. Thanks!
 
 ## Copyright
 
-Copyright (c) 2018 dm-drogerie markt GmbH & Co. KG, https://dm.de
+Copyright (c) 2018 dmTECH GmbH, [dmtech.de](https://www.dmtech.de/)
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
