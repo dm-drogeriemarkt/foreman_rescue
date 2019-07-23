@@ -46,7 +46,7 @@ module ForemanRescue
 
     rake_tasks do
       Rake::Task['db:seed'].enhance do
-        ForemanOmaha::Engine.load_seed
+        ForemanRescue::Engine.load_seed
       end
     end
 
