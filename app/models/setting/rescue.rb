@@ -15,7 +15,7 @@ class Setting
         set('rescue_pxegrub2_tftp_template',
             N_('PXEGrub2 template used when booting rescue system'),
             '', N_('PXEGrub2 rescue template'), nil,
-            :collection => proc { Setting::Rescue.templates('PXEGrub 2') })
+            :collection => proc { Setting::Rescue.templates('PXEGrub2') })
       ]
     end
 
