@@ -1,4 +1,29 @@
-<% title @host.to_label, icon(@host.operatingsystem) + @host.to_label %>
+<%= breadcrumbs(
+    items:
+    [
+      {
+        caption: _('All Hosts'),
+        url: hosts_path
+      },
+      {
+        caption: {
+          text: @host.to_label,
+          icon: {
+            alt: label(@host.operatingsystem),
+            url: icon(@host.operatingsystem, path: true)
+          }
+        },
+        url: host_path(@host)
+      },
+      {
+        caption: _('Rescue Mode'),
+      }
+    ],
+    resource_url: api_hosts_path(thin: true),
+    switcher_item_url: rescue_host_path(':name'),
+    switchable: true
+) %>
+
 <div class="blank-slate-pf">
   <div class="blank-slate-pf-icon">
     <%= icon_text('medkit', '', :kind => 'fa', :class => @host.rescue_mode? ? 'text-success' : '') %>

@@ -1,6 +1,4 @@
 language: ruby
-rvm:
-  - 2.4
 install:
   - unset BUNDLE_GEMFILE
   - cd ..
@@ -24,9 +22,6 @@ env:
     - FOREMAN_PLUGIN_NAME=foreman_rescue
 jobs:
   include:
-    - rvm: 2.4
-      env:
-        - FOREMAN_CORE_BRANCH=1.20-stable
     - rvm: 2.5
       env:
         - FOREMAN_CORE_BRANCH=1.24-stable
