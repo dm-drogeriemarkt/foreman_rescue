@@ -1,6 +1,6 @@
 language: ruby
 rvm:
-  - 2.3
+  - 2.4
 install:
   - unset BUNDLE_GEMFILE
   - cd ..
@@ -24,6 +24,7 @@ env:
     - FOREMAN_PLUGIN_NAME=foreman_rescue
   matrix:
     - FOREMAN_CORE_BRANCH=1.20-stable
+    - FOREMAN_CORE_BRANCH=1.24-stable
     - FOREMAN_CORE_BRANCH=develop
 addons:
   apt:
