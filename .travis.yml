@@ -22,10 +22,17 @@ env:
   global:
     - TESTOPTS=-v
     - FOREMAN_PLUGIN_NAME=foreman_rescue
-  matrix:
-    - FOREMAN_CORE_BRANCH=1.20-stable
-    - FOREMAN_CORE_BRANCH=1.24-stable
-    - FOREMAN_CORE_BRANCH=develop
+jobs:
+  include:
+    - rvm: 2.4
+      env:
+        - FOREMAN_CORE_BRANCH=1.20-stable
+    - rvm: 2.5
+      env:
+        - FOREMAN_CORE_BRANCH=1.24-stable
+    - rvm: 2.5
+      env:
+        - FOREMAN_CORE_BRANCH=develop
 addons:
   apt:
     packages:
