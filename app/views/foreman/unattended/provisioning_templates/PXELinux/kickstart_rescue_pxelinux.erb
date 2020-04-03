@@ -49,7 +49,7 @@ oses:
   end
 
   # kickstart repository for LiveOS
-  options.push("method=#{@host.operatingsystem.medium_uri(@host)}")
+  options.push("method=#{medium_uri}")
 
   if host_param('blacklist')
     options.push("modprobe.blacklist=" + host_param('blacklist').gsub(' ', ''))
