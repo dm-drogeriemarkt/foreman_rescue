@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 Rails.application.routes.draw do
   constraints(:id => /[^\/]+/) do
     resources :hosts, controller: 'foreman_rescue/hosts', :only => [] do

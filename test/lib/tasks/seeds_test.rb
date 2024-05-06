@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_plugin_helper'
 
 module ForemanRescue
@@ -27,7 +29,7 @@ module ForemanRescue
     def seed
       User.current = FactoryBot.build(:user, :admin => true,
                                              :organizations => [], :locations => [])
-      load Rails.root.join('db', 'seeds.rb')
+      load Rails.root.join('db/seeds.rb')
     end
   end
 end

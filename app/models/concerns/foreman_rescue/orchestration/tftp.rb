@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module ForemanRescue
   module Orchestration
     module TFTP

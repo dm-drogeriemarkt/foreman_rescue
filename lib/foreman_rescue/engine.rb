@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module ForemanRescue
   class Engine < ::Rails::Engine
     engine_name 'foreman_rescue'
@@ -12,20 +14,34 @@ module ForemanRescue
       end
     end
 
-    initializer 'foreman_monitoring.load_default_settings',
-                :before => :load_config_initializers do |_app|
-      if begin
-        Setting.table_exists?
-      rescue StandardError
-        false
-      end
-        require_dependency File.expand_path('../../../app/models/setting/rescue.rb', __FILE__)
-      end
-    end
+    initializer 'foreman_rescue.register_plugin', :before => :finisher_hook do |_app| # rubocop:disable Metrics/BlockLength
+      Foreman::Plugin.register :foreman_rescue do # rubocop:disable Metrics/BlockLength
+        requires_foreman '>= 3.9'
 
-    initializer 'foreman_rescue.register_plugin', :before => :finisher_hook do |_app|
-      Foreman::Plugin.register :foreman_rescue do
-        requires_foreman '>= 1.21'
+        settings do
+          category :rescue, N_('Rescue') do
+            setting('rescue_pxelinux_tftp_template',
+              type: :string,
+              default: 'Kickstart rescue PXELinux',
+              full_name: N_('PXELinux rescue template'),
+              description: N_('PXELinux template used when booting rescue system'),
+              collection: proc { ProvisioningTemplate.templates_by_kind('PXELinux') })
+
+            setting('rescue_pxegrub_tftp_template',
+              type: :string,
+              default: '',
+              full_name: N_('PXEGrub rescue template'),
+              description: N_('PXEGrub template used when booting rescue system'),
+              collection: proc { ProvisioningTemplate.templates_by_kind('PXEGrub') })
+
+            setting('rescue_pxegrub2_tftp_template',
+              type: :string,
+              default: '',
+              full_name: N_('PXEGrub2 rescue template'),
+              description: N_('PXEGrub2 template used when booting rescue system'),
+              collection: proc { ProvisioningTemplate.templates_by_kind('PXEGrub2') })
+          end
+        end
 
         # Add permissions
         security_block :foreman_rescue do
@@ -35,13 +51,12 @@ module ForemanRescue
     end
 
     config.to_prepare do
-      begin
-        Host::Managed.send(:prepend, ForemanRescue::HostExtensions)
-        HostsHelper.send(:prepend, ForemanRescue::HostsHelperExtensions)
-        Nic::Managed.send(:prepend, ForemanRescue::Orchestration::TFTP)
-      rescue StandardError => e
-        Rails.logger.warn "ForemanRescue: skipping engine hook (#{e})"
-      end
+      Host::Managed.prepend ForemanRescue::HostExtensions
+      HostsHelper.prepend ForemanRescue::HostsHelperExtensions
+      Nic::Managed.prepend ForemanRescue::Orchestration::TFTP
+      ProvisioningTemplate.prepend ForemanRescue::ProvisioningTemplateExtensions
+    rescue StandardError => e
+      Rails.logger.warn "ForemanRescue: skipping engine hook (#{e})"
     end
 
     rake_tasks do
@@ -51,7 +66,7 @@ module ForemanRescue
     end
 
     initializer 'foreman_rescue.register_gettext', after: :load_config_initializers do |_app|
-      locale_dir = File.join(File.expand_path('../../..', __FILE__), 'locale')
+      locale_dir = File.join(File.expand_path('../..', __dir__), 'locale')
       locale_domain = 'foreman_rescue'
       Foreman::Gettext::Support.add_text_domain locale_domain, locale_dir
     end
