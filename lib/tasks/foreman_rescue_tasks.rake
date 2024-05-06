@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rake/testtask'
 
 # Tests
@@ -13,7 +15,7 @@ namespace :test do
 end
 
 namespace :foreman_rescue do
-  task :rubocop do
+  task rubocop: :environment do
     begin
       require 'rubocop/rake_task'
       RuboCop::RakeTask.new(:rubocop_foreman_rescue) do |task|

@@ -1,9 +1,12 @@
+# frozen_string_literal: true
+
 module ForemanRescue
   class HostsController < ::HostsController
     before_action :find_resource, :only => [:rescue, :set_rescue, :cancel_rescue]
     define_action_permission ['rescue', 'set_rescue', 'cancel_rescue'], :rescue
 
-    def rescue; end
+    def rescue
+    end
 
     def set_rescue
       forward_url_options
@@ -16,10 +19,10 @@ module ForemanRescue
                         _('Enabled %s for boot into rescue system on next boot, but failed to power cycle the host.')
                       end
             process_success :success_msg => message % @host, :success_redirect => :back
-          rescue StandardError => error
+          rescue StandardError => e
             message = _('Failed to reboot %s.') % @host
             warning(message)
-            Foreman::Logging.exception(message, error)
+            Foreman::Logging.exception(message, e)
             process_success :success_msg => _('Enabled %s for rescue system on next boot.') % @host, :success_redirect => :back
           end
         else
@@ -35,8 +38,10 @@ module ForemanRescue
         process_success :success_msg => _('Canceled booting into rescue system for %s.') % @host.name, :success_redirect => :back
       else
         process_error :redirect => :back,
-                      :error_msg => _('Failed to cancel booting into rescue system for %{hostname} with the following errors: %{errors}') %
-                                    { :hostname => @host.name, :errors => @host.errors.full_messages.to_sentence }
+          :error_msg => _('Failed to cancel booting into rescue system for %{hostname} with the following errors: %{errors}') % {
+            :hostname => @host.name,
+            :errors => @host.errors.full_messages.to_sentence,
+          }
       end
     end
   end
