@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 User.as_anonymous_admin do
   templates = [
-    { :name => 'Kickstart rescue PXELinux', :source => 'PXELinux/kickstart_rescue_pxelinux.erb', :template_kind => TemplateKind.find_by(:name => 'PXELinux') }
+    { :name => 'Kickstart rescue PXELinux', :source => 'PXELinux/kickstart_rescue_pxelinux.erb', :template_kind => TemplateKind.find_by(:name => 'PXELinux') },
   ]
 
   templates.each do |template|

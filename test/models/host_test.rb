@@ -1,9 +1,10 @@
+# frozen_string_literal: true
+
 require 'test_plugin_helper'
 
 class HostTest < ActiveSupport::TestCase
   setup do
     User.current = FactoryBot.build(:user, :admin)
-    setup_settings
     disable_orchestration
   end
 

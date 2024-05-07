@@ -1,15 +1,15 @@
+inherit_gem:
+  theforeman-rubocop:
+    - default.yml
+
 AllCops:
-   TargetRubyVersion: 2.2
-   TargetRailsVersion: 5.1
-   Exclude:
-     - '*.spec'
-     - 'Rakefile'
+  TargetRubyVersion: '2.7'
+  Exclude:
+    - 'vendor/bundle/**/*'
 
-Rails:
-  Enabled: true
-
-Rails/ActionFilter:
-  EnforcedStyle: action
+Style/FrozenStringLiteralComment:
+  Exclude:
+    - Rakefile
 
 # Don't enforce documentation
 Style/Documentation:
@@ -19,10 +19,6 @@ Metrics/MethodLength:
   Max: 40
 
 Metrics/ClassLength:
-  Exclude:
-    - 'test/**/*'
-
-Performance/FixedSize:
   Exclude:
     - 'test/**/*'
 
@@ -47,7 +43,7 @@ Style/HashSyntax:
     - ruby19
     - hash_rockets
 
-Metrics/LineLength:
+Layout/LineLength:
   Max: 190
 
 Style/SymbolArray:
