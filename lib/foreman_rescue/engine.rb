@@ -54,7 +54,7 @@ module ForemanRescue
       Host::Managed.prepend ForemanRescue::HostExtensions
       HostsHelper.prepend ForemanRescue::HostsHelperExtensions
       Nic::Managed.prepend ForemanRescue::Orchestration::TFTP
-      ProvisioningTemplate.prepend ForemanRescue::ProvisioningTemplateExtensions
+      ProvisioningTemplate.singleton_class.prepend ForemanRescue::ProvisioningTemplateExtensions::ClassMethods
     rescue StandardError => e
       Rails.logger.warn "ForemanRescue: skipping engine hook (#{e})"
     end
