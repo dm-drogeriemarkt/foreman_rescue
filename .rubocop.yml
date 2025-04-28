@@ -61,5 +61,8 @@ Style/RegexpLiteral:
 Metrics/AbcSize:
   Enabled: false
 
+Metrics/BlockLength:
+  Enables: false
+
 Metrics/PerceivedComplexity:
   Enabled: false
