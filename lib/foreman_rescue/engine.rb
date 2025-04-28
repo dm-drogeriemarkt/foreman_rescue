@@ -12,7 +12,7 @@ module ForemanRescue
     end
 
     initializer 'foreman_rescue.register_plugin', :before => :finisher_hook do |app| # rubocop:disable Metrics/BlockLength
-      app.reloader.to_prepare do
+      app.reloader.to_prepare do # rubocop:disable Metrics/BlockLength
         Foreman::Plugin.register :foreman_rescue do # rubocop:disable Metrics/BlockLength
           requires_foreman '>= 3.13'
 
