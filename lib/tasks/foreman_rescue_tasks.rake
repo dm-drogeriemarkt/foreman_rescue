@@ -6,8 +6,8 @@ require 'rake/testtask'
 namespace :test do
   desc 'Test ForemanRescue'
   Rake::TestTask.new(:foreman_rescue) do |t|
-    t.libs << "test"
-    t.pattern = ["test/**/*_test.rb"]
+    t.libs << 'test'
+    t.pattern = ['test/**/*_test.rb']
     t.verbose = true
     t.warning = false
   end
