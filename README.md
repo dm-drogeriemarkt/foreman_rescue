@@ -13,6 +13,7 @@ This plugin allows a user to boot a Foreman host into a rescue system via PXE.
 | >= 1.20         | ~> 2.0         |
 | >= 1.21         | ~> 3.0         |
 | >= 3.9          | ~> 4.0         |
+| >= 3.13         | ~> 5.0         |
 
 ## Installation
 
