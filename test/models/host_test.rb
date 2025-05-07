@@ -57,10 +57,15 @@ class HostTest < ActiveSupport::TestCase
       test 'should deploy rescue template' do
         Setting['rescue_pxelinux_tftp_template'] = template.name
         version = Foreman::Version.new
-        if version.major == 3 and version.minor <= 13
+        if version.major == 3 && version.minor <= 13
           ProxyAPI::TFTP.any_instance.expects(:set).with('PXELinux', host.mac, :pxeconfig => template.template).once
         else
-          ProxyAPI::TFTP.any_instance.expects(:set).with('PXELinux', host.mac, {:pxeconfig => template.template, :targetos => os.name.downcase.to_s, :release => host.operatingsystem.release, :arch => host.arch.name, :bootfile_suffix => host.arch.bootfilename_efi}).once
+          ProxyAPI::TFTP.any_instance.expects(:set).with('PXELinux', host.mac, {:pxeconfig => template.template,
+                                                                                :targetos => os.name.downcase.to_s,
+                                                                                :release => host.operatingsystem.release,
+                                                                                :arch => host.arch.name,
+                                                                                :bootfile_suffix => host.arch.bootfilename_efi}).once
+
         end
         host.stubs(:skip_orchestration?).returns(false) # Enable orchestration
         assert host.save
