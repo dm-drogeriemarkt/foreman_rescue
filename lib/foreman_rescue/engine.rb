@@ -4,9 +4,6 @@ module ForemanRescue
   class Engine < ::Rails::Engine
     engine_name 'foreman_rescue'
 
-    config.autoload_paths += Dir["#{config.root}/app/helpers/concerns"]
-    config.autoload_paths += Dir["#{config.root}/app/models/concerns"]
-
     # Add any db migrations
     initializer 'foreman_rescue.load_app_instance_data' do |app|
       ForemanRescue::Engine.paths['db/migrate'].existent.each do |path|
@@ -14,38 +11,40 @@ module ForemanRescue
       end
     end
 
-    initializer 'foreman_rescue.register_plugin', :before => :finisher_hook do |_app| # rubocop:disable Metrics/BlockLength
-      Foreman::Plugin.register :foreman_rescue do # rubocop:disable Metrics/BlockLength
-        requires_foreman '>= 3.9'
+    initializer 'foreman_rescue.register_plugin', :before => :finisher_hook do |app| # rubocop:disable Metrics/BlockLength
+      app.reloader.to_prepare do # rubocop:disable Metrics/BlockLength
+        Foreman::Plugin.register :foreman_rescue do # rubocop:disable Metrics/BlockLength
+          requires_foreman '>= 3.13'
 
-        settings do
-          category :rescue, N_('Rescue') do
-            setting('rescue_pxelinux_tftp_template',
-              type: :string,
-              default: 'Kickstart rescue PXELinux',
-              full_name: N_('PXELinux rescue template'),
-              description: N_('PXELinux template used when booting rescue system'),
-              collection: proc { ProvisioningTemplate.templates_by_kind('PXELinux') })
+          settings do
+            category :rescue, N_('Rescue') do
+              setting('rescue_pxelinux_tftp_template',
+                type: :string,
+                default: 'Kickstart rescue PXELinux',
+                full_name: N_('PXELinux rescue template'),
+                description: N_('PXELinux template used when booting rescue system'),
+                collection: proc { ProvisioningTemplate.templates_by_kind('PXELinux') })
 
-            setting('rescue_pxegrub_tftp_template',
-              type: :string,
-              default: '',
-              full_name: N_('PXEGrub rescue template'),
-              description: N_('PXEGrub template used when booting rescue system'),
-              collection: proc { ProvisioningTemplate.templates_by_kind('PXEGrub') })
+              setting('rescue_pxegrub_tftp_template',
+                type: :string,
+                default: '',
+                full_name: N_('PXEGrub rescue template'),
+                description: N_('PXEGrub template used when booting rescue system'),
+                collection: proc { ProvisioningTemplate.templates_by_kind('PXEGrub') })
 
-            setting('rescue_pxegrub2_tftp_template',
-              type: :string,
-              default: '',
-              full_name: N_('PXEGrub2 rescue template'),
-              description: N_('PXEGrub2 template used when booting rescue system'),
-              collection: proc { ProvisioningTemplate.templates_by_kind('PXEGrub2') })
+              setting('rescue_pxegrub2_tftp_template',
+                type: :string,
+                default: '',
+                full_name: N_('PXEGrub2 rescue template'),
+                description: N_('PXEGrub2 template used when booting rescue system'),
+                collection: proc { ProvisioningTemplate.templates_by_kind('PXEGrub2') })
+            end
           end
-        end
 
-        # Add permissions
-        security_block :foreman_rescue do
-          permission :rescue_hosts, :'foreman_rescue/hosts' => [:rescue, :set_rescue, :cancel_rescue]
+          # Add permissions
+          security_block :foreman_rescue do
+            permission :rescue_hosts, :'foreman_rescue/hosts' => [:rescue, :set_rescue, :cancel_rescue]
+          end
         end
       end
     end
