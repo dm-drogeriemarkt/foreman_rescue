@@ -25,13 +25,6 @@ module ForemanRescue
                 description: N_('PXELinux template used when booting rescue system'),
                 collection: proc { ProvisioningTemplate.templates_by_kind('PXELinux') })
 
-              setting('rescue_pxegrub_tftp_template',
-                type: :string,
-                default: '',
-                full_name: N_('PXEGrub rescue template'),
-                description: N_('PXEGrub template used when booting rescue system'),
-                collection: proc { ProvisioningTemplate.templates_by_kind('PXEGrub') })
-
               setting('rescue_pxegrub2_tftp_template',
                 type: :string,
                 default: '',

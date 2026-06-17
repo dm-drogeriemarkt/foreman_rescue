@@ -51,7 +51,6 @@ class HostTest < ActiveSupport::TestCase
         tasks = host.queue.all.map(&:name)
         assert_includes tasks, "Deploy TFTP PXEGrub2 config for #{host}"
         assert_includes tasks, "Deploy TFTP PXELinux config for #{host}"
-        assert_includes tasks, "Deploy TFTP PXEGrub config for #{host}"
       end
 
       test 'should deploy rescue template' do
