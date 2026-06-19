@@ -11,9 +11,9 @@ module ForemanRescue
       end
     end
 
-    initializer 'foreman_rescue.register_plugin', :before => :finisher_hook do |app| # rubocop:disable Metrics/BlockLength
-      app.reloader.to_prepare do # rubocop:disable Metrics/BlockLength
-        Foreman::Plugin.register :foreman_rescue do # rubocop:disable Metrics/BlockLength
+    initializer 'foreman_rescue.register_plugin', :before => :finisher_hook do |app|
+      app.reloader.to_prepare do
+        Foreman::Plugin.register :foreman_rescue do
           requires_foreman '>= 3.13'
 
           settings do
@@ -24,13 +24,6 @@ module ForemanRescue
                 full_name: N_('PXELinux rescue template'),
                 description: N_('PXELinux template used when booting rescue system'),
                 collection: proc { ProvisioningTemplate.templates_by_kind('PXELinux') })
-
-              setting('rescue_pxegrub_tftp_template',
-                type: :string,
-                default: '',
-                full_name: N_('PXEGrub rescue template'),
-                description: N_('PXEGrub template used when booting rescue system'),
-                collection: proc { ProvisioningTemplate.templates_by_kind('PXEGrub') })
 
               setting('rescue_pxegrub2_tftp_template',
                 type: :string,
